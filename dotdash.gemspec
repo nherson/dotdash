@@ -11,9 +11,18 @@ Gem::Specification.new do |s|
   s.license       = 'GPLv2'
 
   # Files
-  s.files       = ["lib/dotdash.rb"]
+  s.files       = [ "lib/dotdash.rb", 
+                    "lib/dotdash/file.rb",
+                    "lib/dotdash/error.rb",
+                  ]
+
   # Executables
   s.executables << 'dotdash'
-  # Dependencies
+
+  # Runtime Dependencies
   s.add_runtime_dependency 'git', '>= 0'
+  s.add_runtime_dependency 'parseconfig', '~> 1.0.4'
+  
+  # Development Dependencies
+  s.add_development_dependency 'rspec'
 end
