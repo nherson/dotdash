@@ -1,0 +1,3 @@
+add error messages => grep for DotdashError and add to error.rb
+
+implement the file.rb methods
