@@ -14,6 +14,8 @@ Gem::Specification.new do |s|
   s.files       = [ "lib/dotdash.rb", 
                     "lib/dotdash/file.rb",
                     "lib/dotdash/error.rb",
+                    "lib/dotdash/host.rb",
+                    "lib/dotdash/git.rb",
                   ]
 
   # Executables
