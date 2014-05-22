@@ -19,6 +19,7 @@ if ARGV.empty?
 end
 
 # Large case statement dispatching to various sub commands
+# TODO make this more metaprogrammy
 case ARGV[0]
 when "file"
   DotdashFile.dispatch ARGV[1..-1]

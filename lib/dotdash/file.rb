@@ -6,7 +6,6 @@
 require 'dotdash'
 
 module DotdashFile
-  #include DotdashBase
 
   OPS_LIST = [ "clone", "edit", "delete", "import" ]
 
@@ -33,12 +32,16 @@ module DotdashFile
       puts "empty args"
       exit 1
     elsif OPS_LIST.include? args[0]
-      DotdashFile.send(args[0], args[1..-1])
+      DotdashFile.send(args[0], *args[1..-1])
     else
       # Again, error handling
       puts "Don't know what to do with #{args[0]}"
       exit 1
     end
+  end
+
+  def DotdashFile.method_missing(method, *args, &block)
+    DotdashError.unknown_subcommand(method, OPS_LIST)
   end
 
 end

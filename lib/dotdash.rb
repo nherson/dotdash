@@ -4,53 +4,69 @@ require 'dotdash/error'
 require 'dotdash/host'
 require 'dotdash/git'
 
-module DotdashBase
+class DotdashBase
 
   # should have some basic config options and things
   # parsed up and ready to be accessed by other classes
   # that include this one
 
-  DotdashBase::DIR = "~/.dotdash"
+  include DotdashHost
+  
+  # these are all of the settings needed to operate
+  OPTIONS = ['dir', 'editor', 'git_repo_url', 'host']
 
-  def DotdashBase.fetch_repo
+  attr_accessor :dir, :editor, :git_repo_url, :host, :git_repo
+
+  def fetch_repo
     begin
-      repo = DotdashGit.get_repo
-      DotdashBase.const_set(:GIT_REPO, repo)
+      @git_repo = DotdashGit.get_repo
     rescue
       DotdashError.fetch_repo_error
     end
   end
 
-  def DotdashBase.parse_opts
+  def parse_opts
     # make sure the git repo is set, else we have problems
-    config = DotdashBase.get_config
-    if config["git_repo_url"] == nil
+    config = get_config
+    # first just try setting all the values,
+    # dropping invalid options
+    config.each do |key,val|
+      if OPTIONS.include? key
+        self.send(key + '=', val)
+      end
+    end
+    # check for default local repo location
+    if @dir == nil
+      @dir = File.expand_path('~/.dotdash')
+    end
+    if @git_repo_url == nil
       DotdashError.no_repo_specified
     end
-    # set each config option in the file, even if they dont mean anything!
-    config.each do |key,val|
-      DotdashBase.const_set(key.upcase, val)
+    # set editor to user's editor if not in config file
+    if @editor == nil
+      @editor = "$EDITOR"
     end
-    #check the config options that need it
-    if config["editor"] != nil and not system("which #{config["editor"]}")
+    # check that editor is valid
+    if not system("which #{@editor}")
       DotdashError.editor_not_found
+    end
+    # check for specified host
+    if @host == nil
+      @host = `hostname -s`.strip
+      check_if_host_exists @host
     end
   end
 
-  def DotdashBase.get_config
+  def get_config
     config = ParseConfig.new(File.expand_path('~/.dotdash.conf'))
     config.get_params
   end
 
   # Where the magic happens (but not really)
-  def DotdashBase.deploy(args = nil)
-    if args != nil
-      host = args[0]
-    else
-      # get the local hostname to deploy
-      host = `hostname -s`.strip
+  def deploy(host = nil)
+    if host == nil
+      host = @host
     end
-    DotdashHost.check_if_exists host
     puts "Deploying..."
     files = Dir.glob(DotdashBase::DIR + "/host/*")
     home = File.expand_path("~")
