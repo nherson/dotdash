@@ -2,4 +2,4 @@
 *.gem
 .rspec
 Gemfile.lock
-
+*.swp

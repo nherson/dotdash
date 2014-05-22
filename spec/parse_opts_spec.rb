@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'dotdash'
-require 'parseconfig'
 
 describe "parsing config file" do
   before(:each) do

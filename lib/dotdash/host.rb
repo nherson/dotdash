@@ -3,6 +3,13 @@
 #
 module DotdashHost
 
+  OPS_LIST = ['create',
+              'clone',
+              'delete',
+              'rename',
+              'list',
+             ]
+
   def DotdashHost.create(host)
     DotdashHost.check_if_taken host
     # make the host (create the directory)
@@ -10,11 +17,10 @@ module DotdashHost
   end
 
   def DotdashHost.clone(orig_host, new_host)
-    # stub
     d = DotdashBase::DIR
-    DotdashHost.check_if_taken new_host
-    DotdashHost.check_if_exists old_host
-    FileUtils.copy_entry(d + "/#{orig_host}", d + "/#{new_host}")
+    DotdashHost.check_if_taken new_host 
+    DotdashHost.check_if_exists orig_host
+    FileUtils.cp_r(d + "/#{orig_host}", d + "/#{new_host}")
   end
 
   def DotdashHost.delete(host)
@@ -28,6 +34,7 @@ module DotdashHost
     # TODO add a confirmation prompt here
     d = DotdashBase::DIR
     DotdashHost.check_if_exists old_host
+    DotdashHost.check_if_taken new_host
     FileUtils.mv(d+"/#{old_host}", d+"/#{new_host}")
   end
 
@@ -51,7 +58,7 @@ module DotdashHost
 
   # Checks that the given host name does actually exist
   def DotdashHost.check_if_exists(host)
-    hosts = DotdashHosts.get_hosts
+    hosts = DotdashHost.get_hosts
     if not hosts.include? host
         DotdashError.host_does_not_exist host
     end
@@ -63,6 +70,11 @@ module DotdashHost
     d = DotdashBase::DIR
     hosts = Dir.entries(d).select {|h| File.directory?(d + "/#{h}") and not h =~ /^[.]/ }
     return hosts
+  end
+
+  def DotdashHost.method_missing(method, *args, &block)
+    puts "#{method}"
+    DotdashError.unknown_subcommand(method, OPS_LIST)
   end
 
 end

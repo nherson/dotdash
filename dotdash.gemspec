@@ -27,4 +27,5 @@ Gem::Specification.new do |s|
   
   # Development Dependencies
   s.add_development_dependency 'rspec'
+  s.add_development_dependency 'fakefs'
 end

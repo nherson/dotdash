@@ -5,7 +5,7 @@ module DotdashError
     exit 1
   end
 
-  def DotdashError.unknown_subcommand(arg)
+  def DotdashError.unknown_subcommand(arg, available_commands)
     puts "Unknown subcommand: #{arg}"
     puts "Available commands go here...."
     exit 1
