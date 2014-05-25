@@ -11,6 +11,7 @@ class DotdashBase
   # that include this one
 
   include DotdashHost
+  include DotdashFile
   
   # these are all of the settings needed to operate
   OPTIONS = ['dir', 'editor', 'git_repo_url', 'host']
@@ -47,7 +48,7 @@ class DotdashBase
       @editor = "$EDITOR"
     end
     # check that editor is valid
-    if not system("which #{@editor}")
+    if not Kernel.send(:`, "which #{@editor}")
       DotdashError.editor_not_found
     end
     # check for specified host

@@ -56,13 +56,36 @@ module DotdashError
     exit 1
   end
 
-  def DotdashError.create_host_already_exists(host)
+  def DotdashError.host_already_exists(host)
     puts "The host #{host} already exists in the repo."
     exit 1
   end
 
   def DotdashError.host_does_not_exist(host)
     puts "The host #{host} does not exist in the repo."
+    exit 1
+  end
+
+  # DotdashFile Errors
+  
+  def DotdashError.file_not_found(host, file)
+    puts "The file #{file} was not found in host #{host}"
+    exit 1 
+  end
+
+  def DotdashError.system_file_not_found(file)
+    puts "The file #{file} was not found on the system"
+    exit 1
+  end
+
+  def DotdashError.file_already_exists(host, file)
+    puts "The file #{file} already exists on host #{host}"
+    puts "If you are sure this is what you want, try using 'dotdash file delete' first"
+    exit 1
+  end
+
+  def DotdashError.path_is_directory(host, file)
+    puts "The given file #{file} in host #{host} is already a directory."
     exit 1
   end
 

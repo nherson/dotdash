@@ -12,19 +12,10 @@ describe "parse_opts" do
             "host" => "my_host",
            }
     @base.stub(:get_config).and_return(opts)
+    Kernel.stub(:`).and_return(true)
     @base.parse_opts
     expect(@base.git_repo_url).to eq("GIT_REPO_LOCATION")
     expect(@base.host).to eq("my_host")
-  end
-
-  it "should not crash when given arbitrary options" do
-    opts = {
-            "optionA" => "some_parameter",
-            "optionB" => "another_setting",
-            "settingC" => "foobar",
-            "git_repo_url" => "GIT_PLACE"
-           }
-    @base.stub(:get_config).and_return(opts)
   end
 
   it "should raise an error when listing a bad editor" do
@@ -32,7 +23,7 @@ describe "parse_opts" do
             "git_repo_url" => "place",
             "editor" => "nonexistent_vim_clone",
            }
-    Kernel.stub(:system).and_return(false)
+    Kernel.stub(:`).and_return(false)
     @base.stub(:get_config).and_return(opts)
     DotdashError.should_receive(:editor_not_found)
     @base.parse_opts

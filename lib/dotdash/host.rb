@@ -49,7 +49,7 @@ module DotdashHost
     # variable assignment for more terse code
     hosts = get_hosts
     if hosts.include? host
-      DotdashError.create_host_already_exists host
+      DotdashError.host_already_exists host
     end
   end
 
@@ -57,7 +57,7 @@ module DotdashHost
   def check_if_host_exists(host)
     hosts = get_hosts
     if not hosts.include? host
-        DotdashError.host_does_not_exist host
+      DotdashError.host_does_not_exist host
     end
   end
 
@@ -66,6 +66,10 @@ module DotdashHost
   def get_hosts
     hosts = Dir.entries(@dir).select {|h| File.directory?(@dir + "/#{h}") and not h =~ /^[.]/ }
     return hosts
+  end
+
+  def dispatch_host(args)
+    # do some stuff and call the right method in DotdashHost
   end
 
 end

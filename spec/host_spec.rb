@@ -35,7 +35,7 @@ describe 'host' do
     end
 
     it 'should fail for taken hostnames' do
-      DotdashError.should receive(:create_host_already_exists) { raise SystemExit }
+      DotdashError.should receive(:host_already_exists) { raise SystemExit }
       lambda { @dotdash.create_host('hostA') }.should raise_error SystemExit
     end
   end
@@ -54,7 +54,7 @@ describe 'host' do
     end
 
     it 'should fail given already existing host to clone to' do
-      DotdashError.should receive(:create_host_already_exists) { raise SystemExit }
+      DotdashError.should receive(:host_already_exists) { raise SystemExit }
       lambda { @dotdash.clone_host 'hostA', 'hostB' }.should raise_error SystemExit
       Dir.exists?(@hostA).should == true
       Dir.exists?(@hostB).should == true
@@ -85,12 +85,12 @@ describe 'host' do
     end
 
     it 'fails given already existing destination host' do
-      DotdashError.should receive(:create_host_already_exists) { raise SystemExit }
+      DotdashError.should receive(:host_already_exists) { raise SystemExit }
       lambda { @dotdash.rename_host('hostA', 'hostB') }.should raise_error SystemExit
     end
 
     it 'fails when making a trivial rename' do
-      DotdashError.should receive(:create_host_already_exists) { raise SystemExit }
+      DotdashError.should receive(:host_already_exists) { raise SystemExit }
       lambda { @dotdash.rename_host('hostB', 'hostB') }.should raise_error SystemExit
     end
   end
