@@ -179,7 +179,29 @@ describe 'file' do
   end
 
   describe 'dispatcher' do
-    pending 'test suite not written'
+    it 'calls each method when told to do so' do
+      @dotdash.host = 'hostA'
+      @dotdash.should receive(:import_file) { }
+      @dotdash.should receive(:delete_file) { }
+      @dotdash.should receive(:clone_file) { }
+      @dotdash.should receive(:edit_file) { }
+      @dotdash.dispatch_file(['import', '.zshrc'])
+      @dotdash.dispatch_file(['delete', '.zshrc'])
+      @dotdash.dispatch_file(['clone', 'hostA', '.zshrc'])
+      @dotdash.dispatch_file(['edit', '.zshrc'])
+    end
+
+    it 'uses a custom host when specified' do
+      @dotdash.host = 'hostA'
+      @dotdash.should receive(:import_file).with('.zshrc', 'hostX')
+      @dotdash.dispatch_file(['import', 'hostX', '.zshrc'])
+    end
+
+    it 'handles complex clone calls with the right arg format' do
+      @dotdash.host = 'hostA'
+      @dotdash.should receive(:clone_file).with('hostC', '.zshrc', 'hostB')
+      @dotdash.dispatch_file(['clone', 'hostC', 'hostB', '.zshrc'])
+    end
   end
 
 end

@@ -11,8 +11,11 @@ module DotdashFile
                "edit", 
                "delete", 
                "import",
-               "mkdir",
              ]
+
+  USAGE = "Usage: dotdash file {clone|edit|delete|import} [HOST] filename
+
+Note that 'filename' is a path relative to your home directory"
 
   def clone_file(src_host, file, dest_host=self.host)
     check_if_host_exists src_host
@@ -60,15 +63,36 @@ module DotdashFile
   def dispatch_file(args)
     # TODO Add proper error handling here
     # preferably a usage statement
-    if args.empty?
-      puts "empty args"
+    if args.empty? or args.size == 1
+      puts "#{USAGE}"
       exit 1
-    elsif OPS_LIST.include? args[0]
-      self.send(args[0], *args[1..-1])
+    elsif args.size == 3
+      host = args[1]
+      file = args[2]
     else
-      # Again, error handling
-      puts "Don't know what to do with #{args[0]}"
-      exit 1
+      host = self.host
+      file = args[1]
+    end
+    # extra finaggling if it's a clone command
+    if args[0] == 'clone'
+      if args.size == 2
+        puts "#{USAGE}"
+        exit 1
+      elsif args.size == 3
+        dest_host = self.host
+        file = args[2]
+      else
+        dest_host = args[2]
+        file = args[3]
+      end
+      src_host = args[1]
+    end
+    op = args[0]
+    op_method = args[0] + "_file"
+    if op == 'clone'
+      self.send(op_method, src_host, file, dest_host)
+    else
+      self.send(op_method, file, host)
     end
   end
 
