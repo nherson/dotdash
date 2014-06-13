@@ -26,9 +26,13 @@ dotdash host rename HOST1 HOST2
 
 dotdash deploy [HOST]
 
-dotdash commit
-
 dotdash push
+dotdash pull
+
+
+### Wishlist ###
+
+dotdash link HOST1 [HOST2] FILE
 ```
 
 
