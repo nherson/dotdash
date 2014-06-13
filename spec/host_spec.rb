@@ -98,15 +98,42 @@ describe 'host' do
   describe 'list' do
     it 'displays a proper list of hosts' do
       $stdout = StringIO.new
-      @dotdash.list_hosts
+      @dotdash.list_host
       expect($stdout.string).to match /hostA\nhostB\nhostC/
     end
 
     it 'shows new hosts when they are added' do
       $stdout = StringIO.new
       Dir.mkdir '/hostX'
-      @dotdash.list_hosts
+      @dotdash.list_host
       expect($stdout.string).to match /hostA\nhostB\nhostC\nhostX/
+    end
+  end
+
+  describe 'dispatcher' do
+    it 'calls list host, even if even too many args after it' do
+      @dotdash.should receive(:list_host) { }
+      @dotdash.dispatch_host(["list", "some", "more", "args"])
+    end
+
+    it 'create host calls create_host, even with extra args' do
+      @dotdash.should receive(:create_host).with("hostX") { }
+      @dotdash.dispatch_host(["create", "hostX", "extra", "args"])
+    end
+
+    it 'clone host calls clone_host' do
+      @dotdash.should receive(:clone_host).with("hostX", "hostY") { }
+      @dotdash.dispatch_host(["clone", "hostX", "hostY", "extra", "args"])
+    end
+
+    it 'delete host calls delete_host' do
+      @dotdash.should receive(:delete_host).with("hostA") { }
+      @dotdash.dispatch_host(["delete", "hostA"])
+    end
+
+    it 'rename host calls rename_host' do
+      @dotdash.should receive(:rename_host).with("hostF", "hostG") { }
+      @dotdash.dispatch_host(["rename", "hostF", "hostG"])
     end
   end
 

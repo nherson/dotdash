@@ -7,11 +7,17 @@ if not File.file?(File.expand_path("~/.dotdash.conf"))
   DotdashError.config_not_found
 end
 
-DotdashBase.parse_opts
+d = DotdashBase.new
 
-if ARGV[0] != "init"
-  DotdashBase.fetch_repo
+d.parse_opts
+
+if ARGV[0] == "init"
+  d.init_repo
+  exit 0
 end
+
+# make sure repo exists, set the instance variable
+d.open_repo
 
 # Print general usage if just 'dotdash' was typed
 if ARGV.empty?

@@ -2,7 +2,7 @@ require 'git'
 
 module DotdashGit
 
-  def DotdashGit.get_repo
+  def open_repo
     begin
       repo = Git.open("~/.dotdash")
       return repo
@@ -11,9 +11,8 @@ module DotdashGit
     end
   end
 
-  def DotdashGit.init_repo
-    dotdash_dir = DotdashBase::DIR
-    if File.file?(dotdash_dir) or File.directory?(dotdash_dir)
+  def init_repo
+    if File.file?(@dir) or File.directory?(@dir)
       begin
         repo = Git.open("~/.dotdash")
         DotdashError.git_repo_already_exists
@@ -30,15 +29,14 @@ module DotdashGit
     end
   end
 
-  # Stubs, to be implemented later
-
-  def DotdashGit.push
+  def push
+    self.pull
+    self.git_repo.add(:all => true)
+    self.git_repo.push
   end
 
-  def DotdashGit.pull
-  end
-
-  def DotdashGit.commit
+  def pull
+    self.git_repo.pull
   end
 
 end

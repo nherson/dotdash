@@ -12,6 +12,7 @@ class DotdashBase
 
   include DotdashHost
   include DotdashFile
+  include DotdashGit
   
   # these are all of the settings needed to operate
   OPTIONS = ['dir', 'editor', 'git_repo_url', 'host']
@@ -20,7 +21,7 @@ class DotdashBase
 
   def fetch_repo
     begin
-      @git_repo = DotdashGit.get_repo
+      @git_repo = self.get_repo
     rescue
       DotdashError.fetch_repo_error
     end

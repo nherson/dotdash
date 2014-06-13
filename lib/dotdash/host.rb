@@ -10,6 +10,8 @@ module DotdashHost
               'list',
              ]
 
+  USAGE = "dotdash host {create|rename|delete|clone|list} HOST1 [HOST2]"
+
   def create_host(host)
     check_if_host_taken host
     # make the host (create the directory)
@@ -35,7 +37,7 @@ module DotdashHost
     FileUtils.mv(@dir + "/#{old_host}", @dir + "/#{new_host}")
   end
 
-  def list_hosts
+  def list_host
     get_hosts.each do |host|
       puts "#{host}"
     end
@@ -70,6 +72,27 @@ module DotdashHost
 
   def dispatch_host(args)
     # do some stuff and call the right method in DotdashHost
+    if args.empty? or args.size == 1
+      puts "#{USAGE}"
+      exit 1
+    end
+    op = args[0]
+    host1 = args[1]
+    if args.size >= 2
+      host2 = args[2]
+    end
+    method = op + "_host"
+    if ['clone', 'rename'].include? op and args.size >= 3
+      self.send(method, host1, host2)
+    elsif ['delete', 'create'].include? op
+      self.send(method, host1)
+    elsif op == 'list'
+      self.send(method)
+    else
+      puts "Invalid subcommand: #{op}"
+      puts "#{USAGE}"
+      exit 1
+    end
   end
 
 end
