@@ -23,6 +23,7 @@ dotdash host create HOST
 dotdash host clone HOST1 HOST2
 dotdash host delete HOST
 dotdash host rename HOST1 HOST2
+dotdash host list
 
 dotdash deploy [HOST]
 
