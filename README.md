@@ -67,3 +67,15 @@ fetch dotfiles from.  The repository of config files will be located at
             config
     ...
 ```
+
+### Future Improvements ###
+
+Find an elegant way to delete previously deployed files before deploying a different host
+or set of files. Not doing this can lead to unwanted configs lingering in a home
+directory. Idea: each 'deploy' drops a file called .dotdash.index in ~ that
+lists the files delivered on the last deploy.  Before unloading new files,
+'deploy' will first delete these files.
+
+Link dotfiles across hosts. That way, updating a dotfile for hostA, for example,
+could automatically affect hostB (perhaps they are similar save for a few
+dotfiles).
