@@ -14,4 +14,15 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
+  original_stderr = $stderr
+  original_stdout = $stdout
+  config.before(:all) do 
+    # Redirect stderr and stdout
+    $stderr = File.new(File.join(File.dirname(__FILE__), 'spec_console_log.txt'), 'w')
+    $stdout = File.new(File.join(File.dirname(__FILE__), 'spec_console_log.txt'), 'w')
+  end
+  config.after(:all) do 
+    $stderr = original_stderr
+    $stdout = original_stdout
+  end
 end
