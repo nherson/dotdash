@@ -3,3 +3,4 @@
 .rspec
 Gemfile.lock
 *.swp
+spec/spec_console_log.txt
