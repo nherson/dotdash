@@ -70,9 +70,11 @@ class DotdashBase
       host = @host
     end
     puts "Deploying..."
-    files = Dir.glob(DotdashBase::DIR + "/host/*")
+    files = Dir.glob([@dir, host, '*'].join('/'))
     home = File.expand_path("~")
-    FileUtils.cp_r files home
+    files.each do |file|
+      FileUtils.cp_r file, home
+    end
     puts "Done!"
   end
 
