@@ -55,7 +55,7 @@ Coming soon!
 ### Setup ###
 
 ##### Git Repo #####
-You need a git repo that you have read and write access to. GitHub accounts are free, so it is a great option. However you decide to configure your git situation, it is recommended that you have a way of authenticating automatically, to avoid typing in passwords over and over.  GitHub + SSH Keys is tried and true.
+You need a git repo that you have read and write access to. GitHub accounts are free, so it is a great option. However you decide to configure your git situation, it is recommended that you have a way of authenticating automatically, to avoid typing in passwords over and over.  GitHub + SSH Keys is tried and true.  After this point, you should not need to touch the git repo at all! Don't add anything to it manually!
 
 ##### Dotdash Config #####
 Next, you need a dotdash config file.  Use your favorite text editor to open `~/.dotdash.conf`:
