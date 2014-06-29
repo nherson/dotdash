@@ -1,14 +1,17 @@
 Dotdash
 =======
 
-A second stab at a dotfile manager, this time in Ruby... hopefully I find time in this one :)
+### Purpose ###
 
-This is a work in its infancy.
+The goal is to have a single git repo that houses one user's dotfiles that are
+deployed across several hosts.  My .zshrc may be present on both host A and host
+B, but perhaps with minor differences/optimizations.  This gem aims to ease the
+process of managing identical or similar personal config files across many
+machines.
 
+### Usage ###
 
-### Intended Usage (to be hopefully implemented some day) ###
-
-The following is mostly bookkeeping for what commands should be supported.
+The following commands are currently supported:
 
 ```
 dotdash init
@@ -29,53 +32,45 @@ dotdash deploy [HOST]
 
 dotdash push
 dotdash pull
+```
 
-
-### Wishlist ###
-
+##### Wishlist #####
+```
 dotdash link HOST1 [HOST2] FILE
 ```
 
+### Installation ###
 
-### The Idea ###
-
-The goal is to have a single git repo that houses one users dotfiles that are
-deployed across several hosts.  My .zshrc may be present on both host A and host
-B, but perhaps with minor differences/optimizations.  This gem aims to ease the
-process of managing identical or similar personal config files across many
-machines.
-
-
-### The Planned Implementation ###
-
-Users configure a file located at ~/.dotdash.conf. The only required config
-option at this point is `git_repo_url` which points `dotdash` to a place to
-fetch dotfiles from.  The repository of config files will be located at
-`~/.dotdash` and have the a structure represented by this example:
-
+##### From Source #####
 ```
-.dotdash/
-    host_a/
-        .somethingrc
-        .mutt/
-            .mutt_config1
-            .mutt_config2
-    host_b/
-        .zshrc
-        .tmux.conf
-        .ssh/
-            config
-    ...
+git clone https://github.com/nherson/dotdash
+cd dotdash
+bundle install
+gem build dotdash.gemspec
+gem install ./dotdash-X.X.X.gem  # where you replace X.X.X with what you got from 'gem build dotdash.gemspec'
 ```
+##### Via Rubygems #####
+Coming soon!
 
-### Future Improvements ###
+### Setup ###
 
-Find an elegant way to delete previously deployed files before deploying a different host
-or set of files. Not doing this can lead to unwanted configs lingering in a home
-directory. Idea: each 'deploy' drops a file called .dotdash.index in ~ that
-lists the files delivered on the last deploy.  Before unloading new files,
-'deploy' will first delete these files.
+##### Git Repo #####
+You need a git repo that you have read and write access to. GitHub accounts are free, so it is a great option. However you decide to configure your git situation, it is recommended that you have a way of authenticating automatically, to avoid typing in passwords over and over.  GitHub + SSH Keys is tried and true.
 
-Link dotfiles across hosts. That way, updating a dotfile for hostA, for example,
-could automatically affect hostB (perhaps they are similar save for a few
-dotfiles).
+##### Dotdash Config #####
+Next, you need a dotdash config file.  Use your favorite text editor to open `~/.dotdash.conf`:
+```
+host=
+git_repo_url=
+editor=
+dir=
+```
+Go ahead and set these variables accordingly. `host` is the hostname of the machine; this defaults to the string returned by `hostname -s`.  `git_repo_url` is the external location where your dotdash repo lives.  If you are using GitHub with SSH keys, it should look like this `git@github.com:YOUR_GITHUB_USERNAME/YOUR_DOTDASH_REPO_NAME`. `editor` is the name of the editor you want to use to edit dotfiles in your repo, and it defaults to the environment value of `$EDITOR`. `dir` is the location where the local copy of the dotdash repo should live.  This defaults to `~/.dotdash`.
+
+##### Bootstrapping #####
+
+Simply run `dotdash init`.
+
+### Known Issues ###
+
+Deploying different hosts to the same machine can leave lingering files.  There should be a way to keep track of the most recent deployment on a given machine, and delete those files before deploying a new host to the machine.
